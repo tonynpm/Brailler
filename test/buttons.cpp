@@ -70,6 +70,7 @@ void loop()
        r6 = 0;
       total1 = 0;
       total2 = 0;
+      delay(2000);
     }
     else{
       Serial.println(total1);
