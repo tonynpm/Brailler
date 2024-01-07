@@ -59,7 +59,7 @@ void loop()
   getState(12,14,27,total2,r4,r5,r6);
 
   if(digitalRead(34)){
-    delay(2000);
+    delay(3000);
     if(digitalRead(34)){
       Serial.println("Cancelled");
       r1 = 0;
