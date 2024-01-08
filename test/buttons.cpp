@@ -14,7 +14,7 @@ bool r4 = 0;
 bool r5 = 0;
 bool r6 = 0;
 
-void getState(short int p1, short int p2, short int p3, short int  &total,bool  &r1,bool  &r2,bool  &r3){
+void getState(short int p1, short int p2, short int p3, short int  &total,bool  &r1,bool  &r2,bool  &r3){ //converts the states of 3 buttons into a single number from 0,1,10,11,100,101,110,111
   short int i = digitalRead(p1);
   short int j = digitalRead(p2);
   short int k = digitalRead(p3); 
