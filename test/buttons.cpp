@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Arduino.h>
 
 
 
@@ -35,17 +36,17 @@ void getState(short int p1, short int p2, short int p3, short int  &total,bool  
 
 void setup()
 {
-  pinMode(12,INPUT);
+  pinMode(33,INPUT);
   pinMode(26,INPUT);
-  pinMode(14,INPUT);
+  pinMode(32,INPUT);
   pinMode(25,INPUT);
   pinMode(27,INPUT);
   pinMode(35,INPUT);
   pinMode(34,INPUT);
   Serial.begin(9600);
-  digitalWrite(12,LOW);
+  digitalWrite(33,LOW);
   digitalWrite(26,LOW);
-  digitalWrite(14,LOW);
+  digitalWrite(32,LOW);
   digitalWrite(25,LOW);
   digitalWrite(27,LOW);
   digitalWrite(35,LOW);
@@ -55,8 +56,8 @@ void setup()
 
 void loop()
 {
-  getState(26,25,35,total1,r1,r2,r3);
-  getState(12,14,27,total2,r4,r5,r6);
+  getState(27,26,25,total1,r1,r2,r3);
+  getState(33,32,35,total2,r4,r5,r6);
 
   if(digitalRead(34)){
     delay(3000);
