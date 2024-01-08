@@ -13,7 +13,7 @@ const short int bp3 = 5 ;//Pin number for 3rd button
 const short int bp4 = 6 ;//Pin number for 4rd button
 const short int bp5 = 7 ;//Pin number for 5th button
 const short int bp6 = 8 ;//Pin number for 6th button
-const short int stepsPerRevolution = 200; //Number of steps needed for a motor to complete one full revolution
+const short int stepsPerRevolution = 2048; //Number of steps needed for a motor to complete one full revolution
 
 Stepper primary(stepsPerRevolution, 9,10,11,12); //The Primary motor (moves the pulley belt)
 Stepper secondary(stepsPerRevolution, 13,14,15,16); //The Secondary motor (moves the die)
