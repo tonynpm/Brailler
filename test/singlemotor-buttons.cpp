@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <Stepper.h>
 
@@ -36,27 +35,27 @@ void getState(short int p1, short int p2, short int p3, short int  &total,bool  
 
 //MAPS code from getState to the number of times the secondary motor made a full revolution
 
-int mapFunction(int total){
+int mapFunction(short total){
     int x = 0;
-    if(total = 1){
+    if(total == 1){
         x = 1;
     }
-    else if(total = 10){
+    else if(total == 10){
         x = 2;
     }
-    else if(total = 11){
+    else if(total == 11){
         x = 3;
     }
-    else if(total = 100){
+    else if(total == 100){
         x = 4;
     }
-    else if(total = 101){
+    else if(total == 101){
         x = 5;
     }
-    else if(total = 110){
+    else if(total == 110){
         x = 6;
     }
-    else if(total = 111){
+    else if(total == 111){
         x = 7;
     }
     return x;
@@ -98,16 +97,21 @@ void loop(){
       Serial.println(total1);
       rots = mapFunction(total1);
       Serial.println(rots);
-      for(i = 0; i>rots; i++){
+      
+      for(i = 0; i<rots; i++){
         SecondaryStepper.step(2048);
         delay(50);
       }
+        
+      
        r1 = 0;
 	     r2 = 0;
        r3 = 0;
        total1 = 0;
     }
   }
-  delay(500);
+  delay(1500);
 }
+  
+
   
