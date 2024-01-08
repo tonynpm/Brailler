@@ -1,9 +1,4 @@
 #include <Arduino.h>
-#include <Arduino.h>
-
-
-
-
 
 short int total1 = 0;
 short int total2 = 0;
