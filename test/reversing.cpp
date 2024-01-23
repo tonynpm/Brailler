@@ -84,6 +84,7 @@ void loop() {
             else{
               //move primary motor large distance
             }
+	    vector.at(29-z)=-1;
          }
       }
       
