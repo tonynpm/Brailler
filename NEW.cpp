@@ -1,8 +1,9 @@
-//NEW
 #define REMOTEXY_MODE__ESP32CORE_BLE
 #include <BLEDevice.h>
 #define REMOTEXY_BLUETOOTH_NAME "RemoteXY"
 #include <RemoteXY.h>
+#include <Vector.h>
+#include <Stepper.h>
 #pragma pack(push, 1)
 uint8_t RemoteXY_CONF[] =   // 99 bytes
   { 255,32,0,0,0,92,0,17,0,0,0,31,1,106,200,1,1,5,0,130,
@@ -33,6 +34,14 @@ struct {
 111 = 7
 */
 
+//ROTATE SECONDARY MOTORS (x)
+//ROTATE PRIMARY MOTORS (magnitude, x)
+//SEND TEXT BACK TELLING USERS TO WAIT WHEN counter > 26
+//ROTATE SECONDARY MOTORS (8-x) from excl if x is 0
+//ROTATE PRIMARY MOTORS
+//SEND TEXT BACK TELLING USERS To BRaille again
+
+
 void setup() 
 {
   Serial.begin(9600);
@@ -42,189 +51,181 @@ void setup()
   // TODO you setup code
   
 }
-short arr[20][2];
-short times = 0;
+const int MAX = 26;
+int storage_array[MAX];
+Vector<int> arr(storage_array);
+static short times = 0;
+
 void convert(char character){
   Serial.println(character);
   switch(character){
   case 'A':
-    arr[times][0] = 1; 
-    arr[times][1] = 0; 
+    arr.push_back(1); 
+    arr.push_back(0); 
     break; 
   case 'B': 
-    arr[times][0] = 3; 
-    arr[times][1] = 0; 
+    arr.push_back(3); 
+    arr.push_back(0); 
     break;     
   case 'C': 
-    arr[times][0] = 1; 
-    arr[times][1] = 1; 
+    arr.push_back(1); 
+    arr.push_back(1); 
     break;
   case 'D': 
-    arr[times][0] = 1; 
-    arr[times][1] = 3;  
+    arr.push_back(1); 
+    arr.push_back(3);  
     break;
   case 'E': 
-    arr[times][0] = 1; 
-    arr[times][1] = 2; 
+    arr.push_back(1); 
+    arr.push_back(2); 
     break;
   case 'F': 
-    arr[times][0] = 3; 
-    arr[times][1] = 1; 
+    arr.push_back(3); 
+    arr.push_back(1); 
     break;
   case 'G': 
-    arr[times][0] = 3; 
-    arr[times][1] = 3; 
+    arr.push_back(3);
+    arr.push_back(3); 
     break;
   case 'H': 
-    arr[times][0] = 3; 
-    arr[times][1] = 2; 
+    arr.push_back(3); 
+    arr.push_back(2); 
     break;
   case 'I': 
-    arr[times][0] = 2; 
-    arr[times][1] = 1; 
+    arr.push_back(2); 
+    arr.push_back(1); 
     break;
   case 'J': 
-    arr[times][0] = 2; 
-    arr[times][1] = 3; 
+    arr.push_back(2); 
+    arr.push_back(3); 
     break;
   case 'K': 
-    arr[times][0] = 5; 
-    arr[times][1] = 0; 
+    arr.push_back(5); 
+    arr.push_back(0); 
     break;
   case 'L': 
-    arr[times][0] = 7; 
-    arr[times][1] = 0; 
+    arr.push_back(7); 
+    arr.push_back(0); 
     break;
   case 'M': 
-    arr[times][0] = 5; 
-    arr[times][1] = 1; 
+    arr.push_back(5); 
+    arr.push_back(1); 
     break;
   case 'N': 
-    arr[times][0] = 5; 
-    arr[times][1] = 3; 
+    arr.push_back(5); 
+    arr.push_back(3); 
     break;
   case 'O': 
-    arr[times][0] = 5; 
-    arr[times][1] = 2; 
+    arr.push_back(5); 
+    arr.push_back(2); 
     break;
   case 'P': 
-    arr[times][0] = 7; 
-    arr[times][1] = 1; 
+    arr.push_back(7); 
+    arr.push_back(1); 
     break;
   case 'Q': 
-    arr[times][0] = 7; 
-    arr[times][1] = 3; 
+    arr.push_back(7); 
+    arr.push_back(3); 
     break;
   case 'R': 
-    arr[times][0] = 7; 
-    arr[times][1] = 2; 
+    arr.push_back(7); 
+    arr.push_back(2); 
     break;
   case 'S': 
-    arr[times][0] = 6; 
-    arr[times][1] = 1; 
+    arr.push_back(6); 
+    arr.push_back(1); 
     break;
   case 'T': 
-    arr[times][0] = 6; 
-    arr[times][1] = 3; 
+    arr.push_back(6); 
+    arr.push_back(3); 
     break;
   case 'U': 
-    arr[times][0] = 5; 
-    arr[times][1] = 4; 
+    arr.push_back(5); 
+    arr.push_back(4); 
     break;
   case 'V': 
-    arr[times][0] = 7; 
-    arr[times][1] = 4; 
+    arr.push_back(3); 
+    arr.push_back(4); 
     break;
   case 'W': 
-    arr[times][0] = 2; 
-    arr[times][1] = 7; 
+    arr.push_back(2);
+    arr.push_back(7); 
     break;
   case 'X': 
-    arr[times][0] = 5; 
-    arr[times][1] = 5; 
+    arr.push_back(5);
+    arr.push_back(5);
     break;
   case 'Y': 
-    arr[times][0] = 5; 
-    arr[times][1] = 7; 
+    arr.push_back(5);
+    arr.push_back(7);
     break;
   case 'Z': 
-    arr[times][0] = 5; 
-    arr[times][1] = 6; 
+    arr.push_back(5);
+    arr.push_back(6);
     break;
   case ' ':
-    arr[times][0] = 0;
-    arr[times][0] = 0;
+    arr.push_back(0);
+    arr.push_back(0);
   case '1': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 1;
-    arr[times][1] = 0;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(1);
+    arr.push_back(0);
     break;
   case '2': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 3;
-    arr[times][1] = 0;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(3);
+    arr.push_back(0);
     break;
    case '3': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 1;
-    arr[times][1] = 1;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(1);
+    arr.push_back(1);
     break;
    case '4': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 1;
-    arr[times][1] = 3;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(1);
+    arr.push_back(3);
     break;
    case '5': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 1;
-    arr[times][1] = 2;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(1);
+    arr.push_back(2);
     break;
    case '6': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 3;
-    arr[times][1] = 1;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(3);
+    arr.push_back(1);
     break;
    case '7': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 3;
-    arr[times][1] = 3;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(3);
+    arr.push_back(3);
     break;
    case '8': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 3;
-    arr[times][1] = 2;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(3);
+    arr.push_back(2);
     break;
    case '9': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 2;
-    arr[times][1] = 1;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(2);
+    arr.push_back(1);
     break;
    case '0': 
-    arr[times][0] = 4; 
-    arr[times][1] = 7;
-    times++;
-    arr[times][0] = 2;
-    arr[times][1] = 3;
+    arr.push_back(4);
+    arr.push_back(7);
+    arr.push_back(2);
+    arr.push_back(3);
     break;
-  
   }
  
 }
@@ -248,36 +249,43 @@ void loop()
       Serial.println("-- BRAILLING --");
       
       for(int i = 0; RemoteXY.text[i] !='\0';i++){
-      if(((char) toupper(RemoteXY.text[i])) == "A" && ((char) toupper(RemoteXY.text[i+1])) == "N" && ((char) toupper(RemoteXY.text[i+2])) == "D"){
-        arr[times][0] = 1; 
-        arr[times][1] = 5;
-        
-      }
-      else if (((char) toupper(RemoteXY.text[i])) == "F" && ((char) toupper(RemoteXY.text[i+1])) == "O" && ((char) toupper(RemoteXY.text[i+2])) == "R"){
-        arr[times][0] = 1; 
-        arr[times][1] = 1;
-      }
-      else if (((char) toupper(RemoteXY.text[i])) == "T" && ((char) toupper(RemoteXY.text[i+1])) == "H" && ((char) toupper(RemoteXY.text[i+2])) == "E"){
-        arr[times][0] = 6; 
-        arr[times][1] = 5;
-      }
-      else if (((char) toupper(RemoteXY.text[i])) == "O" && ((char) toupper(RemoteXY.text[i+1])) == "F"){
-        arr[times][0] = 1; 
-        arr[times][1] = 6;
-      }
-      else{
-      convert((char) toupper(RemoteXY.text[i]));
-      }
-      Serial.println(arr[times][0], arr[times][1]);
-       times++;
+        if(((char) toupper(RemoteXY.text[i])) == 'A' && ((char) toupper(RemoteXY.text[i+1])) == 'N' && ((char) toupper(RemoteXY.text[i+2])) == 'D'){
+          arr.push_back(7); 
+          arr.push_back(5);
+          i=i+2;
+          
+        }
+        else if (((char) toupper(RemoteXY.text[i])) == 'F' && ((char) toupper(RemoteXY.text[i+1])) == 'O' && ((char) toupper(RemoteXY.text[i+2])) == 'R'){
+          arr.push_back(7); 
+          arr.push_back(7);
+          i=i+2;
+        }
+        else if (((char) toupper(RemoteXY.text[i])) == 'T' && ((char) toupper(RemoteXY.text[i+1])) == 'H' && ((char) toupper(RemoteXY.text[i+2])) == 'E'){
+          arr.push_back(6); 
+          arr.push_back(5);
+          i=i+2;
+        }
+        else if (((char) toupper(RemoteXY.text[i])) == 'O' && ((char) toupper(RemoteXY.text[i+1])) == 'F'){
+          arr.push_back(7); 
+          arr.push_back(6);
+          i=i+1;
+        }
+        else{
+          convert((char) toupper(RemoteXY.text[i]));
+        }
+      RemoteXY_delay(2000);
+    for(int i = 0; i<26; i++){
+      Serial.print(arr.at(i));
+    }
+    Serial.println();
       }
     }
     } 
     
 
+  //error thrown when txt<3
   
   
-  // TODO you loop code
   // use the RemoteXY structure for data transfer
   // do not call delay(), use instead RemoteXY_delay() 
 
