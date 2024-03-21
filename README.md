@@ -9,3 +9,7 @@ For NEA Project 2023
 
 ## Working files
 Can be found in the working directory
+
+## NEW
+-- buttons exluded
+-- voice via bluetooth from phone used instead
