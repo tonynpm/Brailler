@@ -305,7 +305,7 @@ void loop()
           turnPrimary(1);
           turnSecondary(7);
           turnPrimary(0);
-          turnSecondary6);
+          turnSecondary(6);
           arr.push_back(7); 
           arr.push_back(6);
           i=i+1;
